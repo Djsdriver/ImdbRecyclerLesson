@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ImdbRecyclerLesson</string>
+    <string name="movie_title">Треугольник печали</string>
+    <string name="cover_image">Обложка фильма</string>
+    <string name="movie_desc">Драма, комедия</string>
+    <string name="movie_rating">IMbd 7.9/10</string>
+    <string name="description">Безумно богатые пассажиры лайнера попадают на дикий остров. Острая и смешная сатира, победившая в Каннах</string>
 </resources>
