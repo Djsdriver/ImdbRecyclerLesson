@@ -3,6 +3,7 @@ package com.example.imdbrecyclerlesson
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.SearchView.OnQueryTextListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.imdbrecyclerlesson.databinding.ActivityMainBinding
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity(),onClickMovie {
             putExtra("item", Gson().toJson(item))
         }
         startActivity(intent)*/
+
 
 
 
