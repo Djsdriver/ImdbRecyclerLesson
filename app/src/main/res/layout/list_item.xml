@@ -1,45 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp">
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="#eeeeee">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <ImageView android:id="@+id/cover"
+        android:layout_width="120dp"
+        android:layout_height="180dp"
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="120dp"
-            android:layout_height="180dp"
-            android:layout_gravity="center_vertical"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+        android:scaleType="centerCrop"/>
 
-        <LinearLayout
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/titleDec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/descriptionMovie"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="TextView" />
-        </LinearLayout>
-
+        <TextView android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="italic"/>
     </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+</LinearLayout>

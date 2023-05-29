@@ -1,4 +1,4 @@
-package com.example.imdbrecyclerlesson
+package com.example.imdbrecyclerlesson.ui.poster
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
@@ -9,14 +9,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.imdbrecyclerlesson.R
 import com.example.imdbrecyclerlesson.databinding.ActivityMovieBinding
 
-import com.example.imdbrecyclerlesson.retrofit.ImdbItemResponse
-import com.google.gson.Gson
+import com.example.imdbrecyclerlesson.domain.models.Movie
 import kotlin.system.measureTimeMillis
 
 
-class Movie : AppCompatActivity() {
+class Poster : AppCompatActivity() {
 
     val binding: ActivityMovieBinding by lazy {
         ActivityMovieBinding.inflate(layoutInflater)
@@ -59,7 +59,7 @@ class Movie : AppCompatActivity() {
 
         //метод через перевода класса через сериализацию
         val elapsedTime = measureTimeMillis {
-            val item=intent.getSerializableExtra("item") as ImdbItemResponse
+            val item=intent.getSerializableExtra("poster") as Movie
             title.text = item.title
             desc.text = item.description
 

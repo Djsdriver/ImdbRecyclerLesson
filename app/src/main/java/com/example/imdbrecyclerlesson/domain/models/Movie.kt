@@ -1,10 +1,8 @@
-package com.example.imdbrecyclerlesson.retrofit
+package com.example.imdbrecyclerlesson.domain.models
 
-import android.os.Parcel
-import android.os.Parcelable
 import java.io.Serializable
 
-data class ImdbItemResponse(
+data class Movie(
     val id: String,
     val resultType: String,
     val image: String,
