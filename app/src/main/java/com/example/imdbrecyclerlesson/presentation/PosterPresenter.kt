@@ -1,33 +1,25 @@
 package com.example.imdbrecyclerlesson.presentation
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.os.Bundle
-import android.util.Log
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.imdbrecyclerlesson.R
-import com.example.imdbrecyclerlesson.databinding.ActivityMovieBinding
 import com.example.imdbrecyclerlesson.domain.models.Movie
-import kotlin.system.measureTimeMillis
+import com.example.imdbrecyclerlesson.presentation.poster.PosterView
 
-class PosterController(private val activity: Activity) {
+class PosterPresenter(private val view: PosterView,
+                      private val item: Movie,) {
 
 
 
     @SuppressLint("MissingInflatedId")
     fun onCreate() {
+        view.setupPosterImage(item)
 
-        val back=activity.findViewById<ImageButton>(R.id.back)
+        /*val back=activity.findViewById<ImageButton>(R.id.back)
 
         //
         //Log.d("MyLog", "$item")
         val title=activity.findViewById<TextView>(R.id.titleDec)
         val desc=activity.findViewById<TextView>(R.id.descriptionMovie)
-        val image=activity.findViewById<ImageView>(R.id.image)
+        val image=activity.findViewById<ImageView>(R.id.image)*/
 
         /* метод через перевода класса в json формат
          val elapsedTime = measureTimeMillis {
@@ -50,7 +42,7 @@ class PosterController(private val activity: Activity) {
          Log.d("MyLog", "$elapsedTime ms")*/
 
 
-        //метод через перевода класса через сериализацию
+        /*//метод через перевода класса через сериализацию
         val elapsedTime = measureTimeMillis {
             val item=activity.intent.getSerializableExtra("poster") as Movie
             title.text = item.title
@@ -67,11 +59,9 @@ class PosterController(private val activity: Activity) {
                 )
                 .into(image)
         }
-        Log.d("MyLog", "$elapsedTime ms")
+        Log.d("MyLog", "$elapsedTime ms")*/
 
-        back.setOnClickListener {
-            activity.finish()
-        }
+
 
 
     }

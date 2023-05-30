@@ -21,7 +21,6 @@ import com.example.imdbrecyclerlesson.domain.models.Movie
 
 class MoviesSearchPresenter(private val view: MoviesView,
                             private val context: Context,
-                            private val adapter: MoviesAdapter
 ) {
 
     private val moviesInteractor = Creator.provideMoviesInteractor(context)
@@ -39,13 +38,6 @@ class MoviesSearchPresenter(private val view: MoviesView,
         val newSearchText = lastSearchText ?: ""
         searchRequest(newSearchText)
     }
-
-    fun onCreate() {
-        adapter.movies = movies
-    }
-
-
-
 
 
     private var lastSearchText: String? = null
@@ -73,7 +65,8 @@ class MoviesSearchPresenter(private val view: MoviesView,
                         if (foundMovies != null) {
                             movies.clear()
                             movies.addAll(foundMovies)
-                            adapter.notifyDataSetChanged()
+                            view.updateMoviesList(movies)
+                            view.showMoviesList(true)
 
                             // Заменили работу с элементами UI на
                             // вызовы методов интерфейса MoviesView
@@ -98,11 +91,10 @@ class MoviesSearchPresenter(private val view: MoviesView,
             // вызовы методов интерфейса
             view.showPlaceholderMessage(true)
             movies.clear()
-            adapter.notifyDataSetChanged()
-
+            view.updateMoviesList(movies)
             view.changePlaceholderText(text)
             if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(context, additionalMessage, Toast.LENGTH_LONG).show()
+                view.showToast(additionalMessage)
 
             }
         } else {
