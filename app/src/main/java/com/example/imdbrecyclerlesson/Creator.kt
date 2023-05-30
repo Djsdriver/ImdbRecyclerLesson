@@ -7,8 +7,9 @@ import com.example.imdbrecyclerlesson.data.network.RetrofitNetworkClient
 import com.example.imdbrecyclerlesson.domain.api.MoviesInteractor
 import com.example.imdbrecyclerlesson.domain.api.MoviesRepository
 import com.example.imdbrecyclerlesson.domain.impl.MoviesInteractorImpl
-import com.example.imdbrecyclerlesson.presentation.MoviesSearchController
+import com.example.imdbrecyclerlesson.presentation.movies.MoviesSearchPresenter
 import com.example.imdbrecyclerlesson.presentation.PosterController
+import com.example.imdbrecyclerlesson.presentation.movies.MoviesView
 
 object Creator {
     private fun getMoviesRepository(context: Context): MoviesRepository {
@@ -19,8 +20,11 @@ object Creator {
         return MoviesInteractorImpl(getMoviesRepository(context))
     }
 
-    fun provideMoviesSearchController(activity: Activity, adapter: MoviesAdapter): MoviesSearchController {
-        return MoviesSearchController(activity, adapter)
+    /*fun provideMoviesSearchPresenter(activity: Activity, adapter: MoviesAdapter): MoviesSearchPresenter {
+        return MoviesSearchPresenter(activity, adapter)
+    }*/
+    fun provideMoviesSearchPresenter(moviesView: MoviesView, context: Context, adapter: MoviesAdapter): MoviesSearchPresenter {
+        return MoviesSearchPresenter(view = moviesView, context = context, adapter = adapter)
     }
 
     fun providePosterController(activity: Activity): PosterController {

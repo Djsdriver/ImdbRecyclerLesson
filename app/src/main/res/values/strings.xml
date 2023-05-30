@@ -5,4 +5,6 @@
     <string name="movie_desc">Драма, комедия</string>
     <string name="movie_rating">IMbd 7.9/10</string>
     <string name="description">Безумно богатые пассажиры лайнера попадают на дикий остров. Острая и смешная сатира, победившая в Каннах</string>
+    <string name="something_went_wrong">Попробуйте позже</string>
+    <string name="nothing_found">Ничего не найдено</string>
 </resources>
