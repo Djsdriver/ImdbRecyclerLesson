@@ -81,15 +81,19 @@ class MoviesSearchController(private val activity: Activity,
             progressBar.visibility = View.VISIBLE
 
             moviesInteractor.searchMovies(queryInput.text.toString(), object : MoviesInteractor.MoviesConsumer {
-                override fun consume(foundMovies: List<Movie>) {
+                override fun consume(foundMovies: List<Movie>, errorMessage: String?) {
                     handler.post {
                         progressBar.visibility = View.GONE
-                        movies.clear()
-                        movies.addAll(foundMovies)
-                        moviesList.visibility = View.VISIBLE
-                        adapter.notifyDataSetChanged()
-                        if (movies.isEmpty()) {
-                            showMessage("R.string.nothing_found)", "")
+                        if (foundMovies != null) {
+                            movies.clear()
+                            movies.addAll(foundMovies)
+                            adapter.notifyDataSetChanged()
+                            moviesList.visibility = View.VISIBLE
+                        }
+                        if (errorMessage != null) {
+                            showMessage("activity.getString(R.string.something_went_wrong)", errorMessage)
+                        } else if (movies.isEmpty()) {
+                            showMessage("activity.getString(R.string.nothing_found)", "")
                         } else {
                             hideMessage()
                         }
@@ -98,6 +102,7 @@ class MoviesSearchController(private val activity: Activity,
             })
         }
     }
+
 
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {

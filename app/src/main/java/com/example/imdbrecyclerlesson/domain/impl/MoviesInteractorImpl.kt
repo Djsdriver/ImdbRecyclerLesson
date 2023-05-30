@@ -1,5 +1,6 @@
 package com.example.imdbrecyclerlesson.domain.impl
 
+import com.example.imdbrecyclerlesson.Resource
 import com.example.imdbrecyclerlesson.domain.api.MoviesInteractor
 import com.example.imdbrecyclerlesson.domain.api.MoviesRepository
 import java.util.concurrent.Executors
@@ -10,11 +11,14 @@ class MoviesInteractorImpl(private val repository: MoviesRepository) : MoviesInt
 
     override fun searchMovies(expression: String, consumer: MoviesInteractor.MoviesConsumer) {
         executor.execute {
-            consumer.consume(repository.searchMovies(expression))
+            when(val resource = repository.searchMovies(expression)) {
+                is Resource.Success -> {
+                    resource.data?.let { consumer.consume(it, null) }
+                }
+                is Resource.Error -> { consumer.consume(emptyList(), resource.message) }
+            }
         }
     }
-
-
 }
 
 /*
