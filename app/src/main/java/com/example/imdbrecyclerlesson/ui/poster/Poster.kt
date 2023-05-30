@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.imdbrecyclerlesson.Creator
 import com.example.imdbrecyclerlesson.R
 import com.example.imdbrecyclerlesson.databinding.ActivityMovieBinding
 
@@ -21,65 +22,14 @@ class Poster : AppCompatActivity() {
     val binding: ActivityMovieBinding by lazy {
         ActivityMovieBinding.inflate(layoutInflater)
     }
+    private val posterController = Creator.providePosterController(this)
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
-
-
-        val back=findViewById<ImageButton>(R.id.back)
-
-        //
-        //Log.d("MyLog", "$item")
-        val title=findViewById<TextView>(R.id.titleDec)
-        val desc=findViewById<TextView>(R.id.descriptionMovie)
-        val image=findViewById<ImageView>(R.id.image)
-
-       /* метод через перевода класса в json формат
-        val elapsedTime = measureTimeMillis {
-            val track = Gson().fromJson(intent.getStringExtra("item"), ImdbItemResponse::class.java)
-            Log.d("MyLog", "$track")
-            title.text=track.title
-            desc.text=track.description
-
-            Glide
-                .with(image)
-                .load(track.image)
-                .centerCrop()
-                .transform(
-                    RoundedCorners(
-                        1
-                    )
-                )
-                .into(image)
-        }
-        Log.d("MyLog", "$elapsedTime ms")*/
-
-
-        //метод через перевода класса через сериализацию
-        val elapsedTime = measureTimeMillis {
-            val item=intent.getSerializableExtra("poster") as Movie
-            title.text = item.title
-            desc.text = item.description
-
-            Glide
-                .with(image)
-                .load(item.image)
-                .centerCrop()
-                .transform(
-                    RoundedCorners(
-                        1
-                    )
-                )
-                .into(image)
-        }
-        Log.d("MyLog", "$elapsedTime ms")
-
-        back.setOnClickListener {
-            finish()
-        }
-
+        posterController.onCreate()
 
     }
 }

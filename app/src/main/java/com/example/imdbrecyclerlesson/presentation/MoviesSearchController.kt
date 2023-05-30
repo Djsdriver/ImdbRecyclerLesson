@@ -1,7 +1,6 @@
-package com.example.imdbrecyclerlesson.ui.movies
+package com.example.imdbrecyclerlesson.presentation
 
-import android.content.Intent
-import android.os.Bundle
+import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
@@ -11,7 +10,6 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbrecyclerlesson.Creator
@@ -19,25 +17,16 @@ import com.example.imdbrecyclerlesson.MoviesAdapter
 import com.example.imdbrecyclerlesson.R
 import com.example.imdbrecyclerlesson.domain.api.MoviesInteractor
 import com.example.imdbrecyclerlesson.domain.models.Movie
-import com.example.imdbrecyclerlesson.ui.poster.Poster
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class MoviesActivity : AppCompatActivity() {
-    private val moviesInteractor = Creator.provideMoviesInteractor(this)
+class MoviesSearchController(private val activity: Activity,
+                             private val adapter: MoviesAdapter
+) {
 
-    private val imdbBaseUrl = "https://imdb-api.com"
+    private val moviesInteractor = Creator.provideMoviesInteractor(activity)
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(imdbBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
 
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
@@ -46,32 +35,42 @@ class MoviesActivity : AppCompatActivity() {
 
     private val movies = ArrayList<Movie>()
 
-    private val adapter = MoviesAdapter {
-        if (clickDebounce()) {
-            val intent = Intent(this, Poster::class.java)
-            intent.putExtra("poster", it)
-            startActivity(intent)
-        }
-    }
-
-    private var isClickAllowed = true
-
     private val handler = Handler(Looper.getMainLooper())
 
     private val searchRunnable = Runnable { searchRequest() }
 
+    fun onCreate() {
+        placeholderMessage = activity.findViewById(R.id.placeholderMessage)
+        queryInput = activity.findViewById(R.id.queryInput)
+        moviesList = activity.findViewById(R.id.locations)
+        progressBar = activity.findViewById(R.id.progressBar)
 
-    private val moviesSearchController = Creator.provideMoviesSearchController(this, adapter)
+        adapter.movies = movies
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        moviesSearchController.onCreate()
+        moviesList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        moviesList.adapter = adapter
+
+        queryInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                searchDebounce()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        moviesSearchController.onDestroy()
+    fun onDestroy() {
+        handler.removeCallbacks(searchRunnable)
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun searchRequest() {
@@ -90,7 +89,7 @@ class MoviesActivity : AppCompatActivity() {
                         moviesList.visibility = View.VISIBLE
                         adapter.notifyDataSetChanged()
                         if (movies.isEmpty()) {
-                            showMessage("getString(R.string.nothing_found)", "")
+                            showMessage("R.string.nothing_found)", "")
                         } else {
                             hideMessage()
                         }
@@ -107,7 +106,7 @@ class MoviesActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
             placeholderMessage.text = text
             if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+                Toast.makeText(activity, additionalMessage, Toast.LENGTH_LONG)
                     .show()
             }
         } else {
@@ -117,19 +116,5 @@ class MoviesActivity : AppCompatActivity() {
 
     private fun hideMessage() {
         placeholderMessage.visibility = View.GONE
-    }
-
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 }

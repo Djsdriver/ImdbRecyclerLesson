@@ -1,4 +1,4 @@
-package com.example.imdbrecyclerlesson.data.network
+package com.example.imdbrecyclerlesson.domain.impl
 
 import com.example.imdbrecyclerlesson.data.NetworkClient
 import com.example.imdbrecyclerlesson.data.dto.MoviesSearchRequest
