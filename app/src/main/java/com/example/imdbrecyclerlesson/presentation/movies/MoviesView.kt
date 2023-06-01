@@ -2,33 +2,19 @@ package com.example.imdbrecyclerlesson.presentation.movies
 
 import com.example.imdbrecyclerlesson.domain.models.Movie
 import com.example.imdbrecyclerlesson.domain.models.MoviesState
+import moxy.MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.OneExecutionStateStrategy
+import moxy.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.alias.AddToEndSingle
+import moxy.viewstate.strategy.alias.OneExecution
 
-interface MoviesView {
+interface MoviesView: MvpView{
 
-   /* fun showPlaceholderMessage(isVisible: Boolean)
-
-    fun showMoviesList(isVisible: Boolean)
-
-    fun showProgressBar(isVisible: Boolean)
-
-    fun changePlaceholderText(newPlaceholderText: String)
-
-    fun updateMoviesList(newMoviesList: List<Movie>)*/
-
-    // Состояние «загрузки»
-    fun showLoading()
-
-    // Состояние «ошибки»
-    fun showError(errorMessage: String)
-
-    // Состояние «пустого списка»
-    fun showEmpty(emptyMessage: String)
-
-    // Состояние «контента»
-    fun showContent(movies: List<Movie>)
-
+    @AddToEndSingle
     fun render(state: MoviesState)
 
-    fun showToast(message: String)
+    @OneExecution
+    fun showToast(additionalMessage: String)
 
 }

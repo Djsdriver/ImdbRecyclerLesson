@@ -19,23 +19,16 @@ import com.example.imdbrecyclerlesson.R
 import com.example.imdbrecyclerlesson.domain.api.MoviesInteractor
 import com.example.imdbrecyclerlesson.domain.models.Movie
 import com.example.imdbrecyclerlesson.domain.models.MoviesState
+import moxy.MvpPresenter
 
 class MoviesSearchPresenter(
-                            private val context: Context
-) {
+    private val context: Context
+) : MvpPresenter<MoviesView>(){
 
-    private var view: MoviesView? = null
-    private var state: MoviesState? = null
+
     private var latestSearchText: String? = null
 
-    fun attachView(view: MoviesView) {
-        this.view = view
-        state?.let { view.render(it) }
-    }
 
-    fun detachView() {
-        this.view = null
-    }
 
     private val moviesInteractor = Creator.provideMoviesInteractor(context)
 
@@ -55,7 +48,6 @@ class MoviesSearchPresenter(
 
 
     private var lastSearchText: String? = null
-
 
 
     fun searchDebounce(changedText: String) {
@@ -95,7 +87,7 @@ class MoviesSearchPresenter(
                                         errorMessage = context.getString(R.string.something_went_wrong),
                                     )
                                 )
-                                view?.showToast(errorMessage)
+                                viewState.showToast(errorMessage)
                             }
 
                             movies.isEmpty() -> {
@@ -126,11 +118,12 @@ class MoviesSearchPresenter(
     }
 
     private fun renderState(state: MoviesState) {
-        this.state = state
-        this.view?.render(state)
+        viewState.render(state)
     }
-    fun onDestroy() {
-        handler.removeCallbacks(searchRunnable)
+
+    override fun onDestroy() {
+        //handler.removeCallbacks(searchRunnable)
+        handler.removeCallbacksAndMessages(searchRunnable)
     }
 }
 
