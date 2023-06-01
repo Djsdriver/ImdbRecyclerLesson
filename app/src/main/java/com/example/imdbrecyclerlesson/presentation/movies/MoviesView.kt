@@ -14,6 +14,18 @@ interface MoviesView {
 
     fun updateMoviesList(newMoviesList: List<Movie>)
 
+    // Состояние «загрузки»
+    fun showLoading()
+
+    // Состояние «ошибки»
+    fun showError(errorMessage: String)
+
+    // Состояние «пустого списка»
+    fun showEmpty(emptyMessage: String)
+
+    // Состояние «контента»
+    fun showContent(movies: List<Movie>)
+
     fun showToast(message: String)
 
 }
