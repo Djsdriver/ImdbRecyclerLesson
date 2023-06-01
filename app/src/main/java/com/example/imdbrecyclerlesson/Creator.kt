@@ -24,8 +24,8 @@ object Creator {
     /*fun provideMoviesSearchPresenter(activity: Activity, adapter: MoviesAdapter): MoviesSearchPresenter {
         return MoviesSearchPresenter(activity, adapter)
     }*/
-    fun provideMoviesSearchPresenter(moviesView: MoviesView, context: Context): MoviesSearchPresenter {
-        return MoviesSearchPresenter(view = moviesView, context = context)
+    fun provideMoviesSearchPresenter(context: Context): MoviesSearchPresenter {
+        return MoviesSearchPresenter(context = context)
     }
 
     fun providePosterPresenter(

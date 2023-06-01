@@ -1,10 +1,11 @@
 package com.example.imdbrecyclerlesson.presentation.movies
 
 import com.example.imdbrecyclerlesson.domain.models.Movie
+import com.example.imdbrecyclerlesson.domain.models.MoviesState
 
 interface MoviesView {
 
-    fun showPlaceholderMessage(isVisible: Boolean)
+   /* fun showPlaceholderMessage(isVisible: Boolean)
 
     fun showMoviesList(isVisible: Boolean)
 
@@ -12,7 +13,7 @@ interface MoviesView {
 
     fun changePlaceholderText(newPlaceholderText: String)
 
-    fun updateMoviesList(newMoviesList: List<Movie>)
+    fun updateMoviesList(newMoviesList: List<Movie>)*/
 
     // Состояние «загрузки»
     fun showLoading()
@@ -25,6 +26,8 @@ interface MoviesView {
 
     // Состояние «контента»
     fun showContent(movies: List<Movie>)
+
+    fun render(state: MoviesState)
 
     fun showToast(message: String)
 

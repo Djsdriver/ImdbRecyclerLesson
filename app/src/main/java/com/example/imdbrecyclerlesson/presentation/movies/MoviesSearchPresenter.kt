@@ -18,10 +18,24 @@ import com.example.imdbrecyclerlesson.MoviesAdapter
 import com.example.imdbrecyclerlesson.R
 import com.example.imdbrecyclerlesson.domain.api.MoviesInteractor
 import com.example.imdbrecyclerlesson.domain.models.Movie
+import com.example.imdbrecyclerlesson.domain.models.MoviesState
 
-class MoviesSearchPresenter(private val view: MoviesView,
-                            private val context: Context,
+class MoviesSearchPresenter(
+                            private val context: Context
 ) {
+
+    private var view: MoviesView? = null
+    private var state: MoviesState? = null
+    private var latestSearchText: String? = null
+
+    fun attachView(view: MoviesView) {
+        this.view = view
+        state?.let { view.render(it) }
+    }
+
+    fun detachView() {
+        this.view = null
+    }
 
     private val moviesInteractor = Creator.provideMoviesInteractor(context)
 
@@ -45,14 +59,24 @@ class MoviesSearchPresenter(private val view: MoviesView,
 
 
     fun searchDebounce(changedText: String) {
-        this.lastSearchText = changedText
+        if (latestSearchText == changedText) {
+            return
+        }
+
+        this.latestSearchText = changedText
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            view.showLoading()
+            renderState(
+                MoviesState(
+                    movies = movies,
+                    isLoading = true,
+                    errorMessage = null,
+                )
+            )
 
             moviesInteractor.searchMovies(newSearchText, object : MoviesInteractor.MoviesConsumer {
                 override fun consume(foundMovies: List<Movie>, errorMessage: String?) {
@@ -64,16 +88,34 @@ class MoviesSearchPresenter(private val view: MoviesView,
 
                         when {
                             errorMessage != null -> {
-                                view.showError(context.getString(R.string.something_went_wrong))
-                                view.showToast(errorMessage)
+                                renderState(
+                                    MoviesState(
+                                        movies = emptyList(),
+                                        isLoading = false,
+                                        errorMessage = context.getString(R.string.something_went_wrong),
+                                    )
+                                )
+                                view?.showToast(errorMessage)
                             }
 
                             movies.isEmpty() -> {
-                                view.showEmpty(context.getString(R.string.nothing_found))
+                                renderState(
+                                    MoviesState(
+                                        movies = emptyList(),
+                                        isLoading = false,
+                                        errorMessage = context.getString(R.string.nothing_found),
+                                    )
+                                )
                             }
 
                             else -> {
-                                view.showContent(movies)
+                                renderState(
+                                    MoviesState(
+                                        movies = movies,
+                                        isLoading = false,
+                                        errorMessage = null,
+                                    )
+                                )
                             }
                         }
 
@@ -83,7 +125,13 @@ class MoviesSearchPresenter(private val view: MoviesView,
         }
     }
 
-            fun onDestroy() {
-                handler.removeCallbacks(searchRunnable)
-            }
-        }
+    private fun renderState(state: MoviesState) {
+        this.state = state
+        this.view?.render(state)
+    }
+    fun onDestroy() {
+        handler.removeCallbacks(searchRunnable)
+    }
+}
+
+
